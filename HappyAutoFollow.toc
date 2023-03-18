@@ -1,0 +1,9 @@
+﻿## Interface: 30300
+## Title:-|cFF00DDFF[hpsnk]|r HappyAutoFollow 
+## Author: hpsnk
+## Notes:[hpsnk]队伍跟随
+## Version: 1.0.0
+## SavedVariables: HappyAutoReplyData
+## SavedVariablesPerCharacter: HappyAutoReplyDataPerCharDB
+
+HappyAutoFollow.lua
