@@ -1,50 +1,15 @@
 -- Author      : hpsnk
 -------------------------------------------------------
-LOGGER                      = {}
-TARGET_MSG_1                = "防脚本检测"
-TARGET_MSG_2                = "请在聊天频道回答以下问题的答案"
-TARGET_MSG_3                = "剩余回答时间"
-TARGET_MSG_4                = "请在聊天频道回答以下问题的答案:|cffFFD800"
-
-TARGET_MSG_INVITE_CHECK     = "555"
-TARGET_MSG_INVITE_APPLY     = "666"
-
-AUTO_FOLLOW_PLAYER_NAME     = "";
-AUTO_FOLLOW_START_MSG       = "111";
-AUTO_FOLLOW_STOP_MSG        = "222";
-
-HAR_ACTIVE_FLAG             = true;
-TRACE_FLAG                  = false;
-
 Config = {};
 Config.commandStart         = "111";
 Config.commandStop          = "222";
 -------------------------------------------------------
 
-SLASH_HAF1                  = "/haf";
--- SLASH_HAF2                  = "/happyar";
-SlashCmdList["HAF"]         = function(msg)
-	local cmd, arg = string.split(" ", msg, 2);
-	cmd = cmd:lower()
-
-	print("HappyAutoFollow!");
-end
 
 local hafFrame = CreateFrame("frame", nil, UIParent)
 
--- hafFrame:RegisterEvent("ADDON_LOADED")
-
-hafFrame:RegisterEvent("CHAT_MSG_PARTY")
--- hafFrame:RegisterEvent("CHAT_MSG_WHISPER")
-hafFrame:RegisterEvent("CHAT_MSG_PARTY_LEADER")
-
--- hafFrame:RegisterEvent("TRADE_SHOW")
-
--- hafFrame:RegisterEvent("PLAYER_LOGIN")
-
-hafFrame:SetScript("OnEvent", hafFrame.EventHandler)
-
-function hafFrame:EventHandler(event,arg1,_,_,_,arg5,_,_,_,_,_,_,_,_)
+function hafFrame:EventHandler(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, _,_,_,_,_)
+	print("receive event= " .. event .. ".");
 
 	-- 组队邀请
 	if event == "PARTY_INVITE_REQUEST" then
@@ -56,14 +21,23 @@ function hafFrame:EventHandler(event,arg1,_,_,_,arg5,_,_,_,_,_,_,_,_)
 	end
 
 	if event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_PARTY" then
+
+		-- print("arg2=" .. arg2);
+		-- print("arg3=" .. arg3);
+		-- print("arg4=" .. arg4);
+		-- print("arg5=" .. arg5);
+		-- print("arg6=" .. arg6);
+		-- print("arg7=" .. arg7);
+		-- print("arg8=" .. arg8);
+
 		if arg1 == Config.commandStart then
-			print("开始跟随" .. arg5)
-			FollowUnit(arg5)
+			print("开始跟随" .. arg2 .. ".");
+			HAF_followStart(arg2);
 		end
 
 		if arg1 == Config.commandStop then
-			print("停止跟随")
-			FollowUnit("player")
+			print("停止跟随");
+			FollowUnit("player");
 		end
 	end
 
@@ -79,3 +53,41 @@ function HAF_closePartyInviteFrame()
 	end
 end
 
+function HAF_followStart(followUnitName)
+
+	print( "Test:" .. UnitName("player") );
+
+	for i = 1, 5 do
+		local strUnitId = "party" .. i;
+		-- LOGGER.debug("  check " .. strUnitId)
+		local strUnitName = UnitName(strUnitId);
+		if strUnitName == nil then
+			break;
+		else
+			print(strUnitId .. "=" .. strUnitName);
+		end
+		-- LOGGER.debug(strUnitId .. "=" .. strUnitName .. ".");
+		if strUnitName == followUnitName then
+			FollowUnit(strUnitId);
+			break;
+		end
+	end
+end
+
+SLASH_HAF1                  = "/haf";
+-- SLASH_HAF2                  = "/happyar";
+SlashCmdList["HAF"]         = function(msg)
+	local cmd, arg = string.split(" ", msg, 2);
+	cmd = cmd:lower()
+
+	print("HappyAutoFollow!");
+end
+
+
+hafFrame:RegisterEvent("PARTY_INVITE_REQUEST");
+hafFrame:RegisterEvent("CHAT_MSG_PARTY");
+hafFrame:RegisterEvent("CHAT_MSG_PARTY_LEADER");
+
+hafFrame:SetScript("OnEvent", hafFrame.EventHandler);
+
+print("HappyAutoFollow Load Complete.");
