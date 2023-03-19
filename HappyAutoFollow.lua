@@ -9,7 +9,7 @@ Config.commandStop          = "222";
 local hafFrame = CreateFrame("frame", nil, UIParent)
 
 function hafFrame:EventHandler(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, _,_,_,_,_)
-	print("receive event= " .. event .. ".");
+	-- print("receive event= " .. event .. ".");
 
 	-- 组队邀请
 	if event == "PARTY_INVITE_REQUEST" then
@@ -55,7 +55,7 @@ end
 
 function HAF_followStart(followUnitName)
 
-	print( "Test:" .. UnitName("player") );
+	-- print( "Test:" .. UnitName("player") );
 
 	for i = 1, 5 do
 		local strUnitId = "party" .. i;
